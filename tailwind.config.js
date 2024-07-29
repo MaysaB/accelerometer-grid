@@ -4,17 +4,12 @@ export default {
   theme: {
     extend: {
       gridTemplateColumns: {
-        ...Array.from({ length: 100 }, (_, i) => i + 1).reduce((acc, num) => {
-          acc[`cols-${num}`] = `repeat(${num}, minmax(0, 1fr))`;
-          return acc;
-        }, {}),
+        // Adding custom classes for 100 columns
+        'cols-100': 'repeat(100, minmax(0, 1fr))',
       },
-      
       gridTemplateRows: {
-        ...Array.from({ length: 100 }, (_, i) => i + 1).reduce((acc, num) => {
-          acc[`rows-${num}`] = `repeat(${num}, minmax(0, 1fr))`;
-          return acc;
-        }, {}),
+        // Adding custom classes for 100 rows
+        'rows-100': 'repeat(100, minmax(0, 1fr))',
       },
     },
   },

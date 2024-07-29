@@ -1,13 +1,14 @@
 const Grid = () => {
-  const numCells = 100 * 100; // 100x100 grid
+  const totalCells = 100 * 100; 
 
   return (
+    // set length at totalCells and create new array using array.from
     <div className="grid grid-cols-cols-100 grid-rows-rows-100" style={{ width: '80vmin', height: '80vmin' }}>
-    {Array.from({ length: numCells }).map((_, index) => (
+    {Array.from({ length: totalCells }).map((_, index) => (
       <div
-        key={index}
-        className="w-full bg-pink-400 border border-white"
-        style={{ aspectRatio: '1 / 1' }}
+        key={index} //set key prop to current index (totalCells - 1)
+        className="w-full bg-pink-400 border border-pink"
+        style={{ aspectRatio: '1 / 1' }} // ensures each cell stays square
         role="gridcell"
       />
     ))}
@@ -16,3 +17,5 @@ const Grid = () => {
 };
 
 export default Grid;
+
+
