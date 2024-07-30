@@ -6,53 +6,36 @@ interface AccelerometerData {
     z: number;
 }
 
-export default function useAccelerometer() {
-    const [accelerometerData, setAccelerometerData] = useState<AccelerometerData | null>(null);
-    const [error, setError] = useState<string | null>(null);
+const useAccelerometer = () => {
+  //initialise
+  const [acceleration, setAcceleration] = useState<AccelerometerData>({ x: 0, y: 0, z: 0 });
+  const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-      let mockInterval: ReturnType<typeof setInterval>;
-  
-      const updateData = (x: number, y: number, z: number) => {
-        setAccelerometerData({ x, y, z });
-      };
-  
-      const handleError = () => {
-        setError('Accelerometer not available, using mock data instead.');
-        mockInterval = setInterval(() => {
-          updateData(
-            Math.random() * 10 - 5,
-            Math.random() * 10 - 5,
-            Math.random() * 10 - 5
-          );
-        }, 1000);
-      };
-  
-      if ('Accelerometer' in window) {
-        try {
-          const Accelerometer = (window as Window).Accelerometer;
-          if (Accelerometer) {
-            const sensor = new Accelerometer({ frequency: 60 });
-            sensor.addEventListener('reading', () => {
-              updateData(sensor.x, sensor.y, sensor.z);
-            });
-            sensor.addEventListener('error', handleError);
-            sensor.start();
-          } else {
-            handleError();
-          }
-        } catch (err) {
-          handleError();
-        }
-      } else {
-        handleError();
+  useEffect(() => {
+
+    //cheks if accelerationIncludingGravity exists and updates state with new values
+    const handleMotion = (event: DeviceMotionEvent) => {
+      if (event.accelerationIncludingGravity) {
+        setAcceleration({
+          x: event.accelerationIncludingGravity.x ?? 0,
+          y: event.accelerationIncludingGravity.y ?? 0,
+          z: event.accelerationIncludingGravity.z ?? 0,
+        });
       }
-  
-      return () => {
-        if (mockInterval) clearInterval(mockInterval);
-      };
-    }, []);
-  
-    return { accelerometerData, error };
-  }
-    
+    };
+    // adds event listener if DME is supported by browser
+    if (window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', handleMotion);
+    } else {
+      setError('This device does not support ');
+    }
+
+    return () => {
+      window.removeEventListener('devicemotion', handleMotion);
+    };
+  }, []);
+
+  return { acceleration, error };
+};
+
+export default useAccelerometer;
