@@ -4,7 +4,7 @@ import useAccelerometer from "../hooks/useAccelerometer";
 const Grid = () => {
   const totalCells = 100 * 100; 
   const { acceleration, error } = useAccelerometer();
-//passes in error from hook
+//passes in error from
   if (error) {
     return <div className="flex justify-center items-center h-screen text-3xl text-red-500">{error}</div>;
   }

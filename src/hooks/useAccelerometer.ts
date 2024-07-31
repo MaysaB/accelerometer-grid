@@ -27,7 +27,7 @@ const useAccelerometer = () => {
     if (window.DeviceMotionEvent) {
       window.addEventListener('devicemotion', handleMotion);
     } else {
-      setError('This device does not support ');
+      setError('This device does not support accelerometer data');
     }
 
     return () => {
