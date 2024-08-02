@@ -11,20 +11,26 @@ function App() {
 
     const DeviceMotionEventWithPermission = DeviceMotionEvent as unknown as DeviceMotionEventWithPermission;
 
-    if (typeof DeviceMotionEventWithPermission.requestPermission === 'function') {
-      (DeviceMotionEventWithPermission).requestPermission()
-        .then(response => {
-          if (response === 'granted') {
-            window.addEventListener('deviceorientation', () => {
-              alert('Permissions granted');
+    if (typeof DeviceMotionEventWithPermission !== 'undefined' &&
+        typeof DeviceMotionEventWithPermission.requestPermission === 'function') {
+        
+        DeviceMotionEventWithPermission.requestPermission()
+            .then((permissionState: PermissionState) => {
+                if (permissionState === 'granted') {
+                    window.addEventListener('devicemotion', (event: DeviceMotionEvent) => {
+                        console.log(`Acceleration X: ${event.acceleration?.x}, Y: ${event.acceleration?.y}, Z: ${event.acceleration?.z}`);
+                    });
+                } else {
+                    console.log('Permission to access device motion was denied.');
+                }
+            })
+            .catch((error: any) => {
+                console.error('Error requesting device motion permission:', error);
             });
-          }
-        })
-        .catch(console.error);
+
     } else {
-      //browsers that don't support DeviceMotionEvent.requestPermission
-      console.warn('DeviceMotionEvent.requestPermission is not supported in this browser.');
-      alert('DeviceMotionEvent.requestPermission is not supported in this browser.');
+        console.log('Request permission property is not supported.');
+        alert('Your browser does not support device motion events.');
     }
 }
 
