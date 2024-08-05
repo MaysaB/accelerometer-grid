@@ -11,8 +11,7 @@ function App() {
 
     const DeviceMotionEventWithPermission = DeviceMotionEvent as unknown as DeviceMotionEventWithPermission;
 
-    if (typeof DeviceMotionEventWithPermission !== 'undefined' &&
-        typeof DeviceMotionEventWithPermission.requestPermission === 'function') {
+    if (typeof DeviceMotionEventWithPermission.requestPermission === 'function') {
         
         DeviceMotionEventWithPermission.requestPermission()
             .then((permissionState: PermissionState) => {
@@ -24,7 +23,7 @@ function App() {
                     console.log('Permission to access device motion was denied.');
                 }
             })
-            .catch((error: any) => {
+            .catch((error: unknown) => {
                 console.error('Error requesting device motion permission:', error);
             });
 
